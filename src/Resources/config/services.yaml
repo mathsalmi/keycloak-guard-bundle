@@ -1,0 +1,17 @@
+parameters:
+
+services:
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  ACSystems\KeycloakGuardBundle\Service\KeycloakParsedTokenFactory:
+    autowire: true
+    arguments:
+      $clientId: '%keycloak_client.client_id%'
+
+  ACSystems\KeycloakGuardBundle\Security\KeycloakTokenAuthenticator:
+    autowire: true
+
+  ACSystems\KeycloakGuardBundle\Security\Provider\KeycloakParsedTokenProvider:
+    autowire: true

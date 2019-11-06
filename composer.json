@@ -1,0 +1,23 @@
+{
+  "name": "acsystems/keycloak-guard-bundle",
+  "description": "Symfony guard authentication via keycloak JWT",
+  "type": "symfony-bundle",
+  "require": {
+    "php": "^7.1",
+    "symfony/security": "^4.3",
+    "symfony/yaml": "^4.3",
+    "acsystems/jwt-auth-bundle": "^0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "ACSystems\\KeycloakGuardBundle\\": "src/"
+    }
+  },
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "ACSystems",
+      "email": "webdev.administration@ac-systems.com"
+    }
+  ]
+}
