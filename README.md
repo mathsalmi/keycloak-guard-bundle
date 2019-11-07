@@ -1,6 +1,6 @@
 # Keycloak Symfony Guard Bundle
 
-The goal of this bundle is to provide a Keycloak authenticator guard for Symfony.
+The goal of this bundle is to provide a Keycloak token authenticator guard for Symfony.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 [![PHP](https://img.shields.io/badge/%3C%2F%3E-PHP%207.1-blue)](https://www.php.net/) 
@@ -53,14 +53,25 @@ security:
     # ...
 ```
 
+Add your jwks provider uri.
+
+`config/packages/keycloak_client.yaml:`
+```yaml
+acsystems_keycloak_guard:
+  keycloak_guard:
+    jwks_uri: 'https://example.com/auth/realms/example-realm/protocol/openid-connect/certs'
+```
+
 #### Configuration
 
 By default the azp inside of the token is used as client id. This can be overwritten.
 
 `config/packages/keycloak_client.yaml:`
 ```yaml
-keycloak_client:
+acsystems_keycloak_guard:
+  keycloak_guard:
     client_id: 'my-client-id'
+    # ...
 ```
 
 ### Supported platforms

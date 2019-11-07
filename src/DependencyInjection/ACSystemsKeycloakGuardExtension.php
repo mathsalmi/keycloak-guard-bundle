@@ -40,9 +40,16 @@ class ACSystemsKeycloakGuardExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $config = array_merge(['keycloak_client' => ['client_id' => '@azp']] , $config);
+        $config = array_merge(['keycloak_guard' => [
+            'client_id' => '@azp',
+            'jwks_uri' => ''
+        ]] , $config);
 
-        $container->setParameter('keycloak_client.client_id', $config['keycloak_client']['client_id']);
+        foreach ($config as $namespace => $values) {
+            foreach ($values as $key => $value) {
+                $container->setParameter("$namespace.$key", $value);
+            }
+        }
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');

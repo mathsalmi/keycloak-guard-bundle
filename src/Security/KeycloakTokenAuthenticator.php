@@ -8,8 +8,9 @@
 
 namespace ACSystems\KeycloakGuardBundle\Security;
 
-use ACSystems\JWTAuthBundle\Validator\BearerTokenValidator;
+use ACSystems\KeycloakGuardBundle\Service\BearerTokenDecoder;
 use ACSystems\KeycloakGuardBundle\Service\KeycloakParsedTokenFactory;
+use ACSystems\KeycloakGuardBundle\Service\TokenDecoderInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,21 +33,21 @@ class KeycloakTokenAuthenticator extends AbstractGuardAuthenticator
     private $parsedTokenFactory;
 
     /**
-     * @var BearerTokenValidator
+     * @var BearerTokenDecoder
      */
-    private $tokenValidator;
+    private $tokenDecoder;
 
     /**
      * KeycloakTokenAuthenticator constructor.
      * @param KeycloakParsedTokenFactory $parsedTokenFactory
-     * @param BearerTokenValidator $tokenValidator
+     * @param TokenDecoderInterface $tokenDecoder
      */
     public function __construct(
         KeycloakParsedTokenFactory $parsedTokenFactory,
-        BearerTokenValidator $tokenValidator
+        TokenDecoderInterface $tokenDecoder
     ) {
         $this->parsedTokenFactory = $parsedTokenFactory;
-        $this->tokenValidator = $tokenValidator;
+        $this->tokenDecoder = $tokenDecoder;
     }
 
     /**
@@ -79,7 +80,7 @@ class KeycloakTokenAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $provider): UserInterface
     {
         $token = $credentials['token'] ?? null;
-        $decodedToken = $this->tokenValidator->decodeAuthorizationToken($token);
+        $decodedToken = $this->tokenDecoder->decodeToken($token);
 
         return $token === null
             ? null

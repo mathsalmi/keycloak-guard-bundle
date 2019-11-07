@@ -29,13 +29,17 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
         $rootNode
             ->children()
-                ->arrayNode('keycloak_client')
+                ->arrayNode('keycloak_guard')
                     ->append($this->getClient())
+                    ->append($this->getJwksUri())
                 ->end();
 
         return $treeBuilder;
     }
 
+    /**
+     * @return NodeDefinition
+     */
     public function getClient(): NodeDefinition
     {
         $node = new ScalarNodeDefinition('client_id');
@@ -47,6 +51,17 @@ class Configuration implements ConfigurationInterface
                 })
                 ->thenInvalid('client_id must be a string.')
             ->end();
+        return $node;
+    }
+
+    /**
+     * @return NodeDefinition
+     */
+    public function getJwksUri(): NodeDefinition
+    {
+        $node = new ScalarNodeDefinition('jwks_uri');
+        $node->defaultNull();
+
         return $node;
     }
 }

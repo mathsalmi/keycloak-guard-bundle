@@ -5,13 +5,27 @@ services:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  ACSystems\KeycloakGuardBundle\Provider\JwksUriJwkProvider:
+    arguments:
+      $jwksUri: '%keycloak_guard.jwks_uri%'
+
+  ACSystems\KeycloakGuardBundle\Provider\JwkProviderInterface:
+    alias: ACSystems\KeycloakGuardBundle\Provider\JwksUriJwkProvider
+
+  ACSystems\KeycloakGuardBundle\Service\BearerTokenDecoder:
+    autowire: true
+    arguments:
+      $jwkProvider: '@ACSystems\KeycloakGuardBundle\Provider\JwkProviderInterface'
+
   ACSystems\KeycloakGuardBundle\Service\KeycloakParsedTokenFactory:
     autowire: true
     arguments:
-      $clientId: '%keycloak_client.client_id%'
+      $clientId: '%keycloak_guard.client_id%'
 
   ACSystems\KeycloakGuardBundle\Security\KeycloakTokenAuthenticator:
     autowire: true
+    arguments:
+      $tokenDecoder: '@ACSystems\KeycloakGuardBundle\Service\BearerTokenDecoder'
 
   ACSystems\KeycloakGuardBundle\Security\Provider\KeycloakParsedTokenProvider:
     autowire: true
