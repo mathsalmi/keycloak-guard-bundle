@@ -8,7 +8,7 @@
 
 namespace ACSystems\KeycloakGuardBundle\Service;
 
-use ACSystems\KeycloakGuardBundle\Entity\KeycloakParsedToken;
+use ACSystems\KeycloakGuardBundle\Entity\KeycloakUser;
 
 /**
  * Class KeycloakParsedTokenFactory
@@ -32,9 +32,9 @@ class KeycloakParsedTokenFactory
 
     /**
      * @param array $token
-     * @return KeycloakParsedToken
+     * @return KeycloakUser
      */
-    public function createFromToken(array $token): KeycloakParsedToken
+    public function createFromToken(array $token): KeycloakUser
     {
         $clientId = $this->clientId === '@azp'
             ? $token['azp']
@@ -46,7 +46,7 @@ class KeycloakParsedTokenFactory
         // Required by Symfony
         $roles[] = 'ROLE_USER';
 
-        return new KeycloakParsedToken(
+        return new KeycloakUser(
             $token['sub'],
             $token['preferred_username'],
             $roles,

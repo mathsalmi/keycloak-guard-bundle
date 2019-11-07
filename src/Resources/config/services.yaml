@@ -27,5 +27,5 @@ services:
     arguments:
       $tokenDecoder: '@ACSystems\KeycloakGuardBundle\Service\BearerTokenDecoder'
 
-  ACSystems\KeycloakGuardBundle\Security\Provider\KeycloakParsedTokenProvider:
+  ACSystems\KeycloakGuardBundle\Security\Provider\KeycloakUserProvider:
     autowire: true

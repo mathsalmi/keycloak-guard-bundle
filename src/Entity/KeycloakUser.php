@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class KeycloakParsedToken
  * @package ACSystems\KeycloakGuardBundle\Entity
  */
-class KeycloakParsedToken implements ParsedTokenInterface, UserInterface
+class KeycloakUser implements ParsedTokenInterface, UserInterface
 {
     /**
      * @var string

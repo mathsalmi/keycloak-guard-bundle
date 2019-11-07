@@ -8,7 +8,7 @@
 
 namespace ACSystems\KeycloakGuardBundle\Security\Provider;
 
-use ACSystems\KeycloakGuardBundle\Entity\KeycloakParsedToken;
+use ACSystems\KeycloakGuardBundle\Entity\KeycloakUser;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * Class KeycloakParsedTokenProvider
  * @package ACSystems\KeycloakGuardBundle\Security\Provider
  */
-class KeycloakParsedTokenProvider implements UserProviderInterface
+class KeycloakUserProvider implements UserProviderInterface
 {
     /**
      * @param $username
@@ -43,6 +43,6 @@ class KeycloakParsedTokenProvider implements UserProviderInterface
      */
     public function supportsClass($class): bool
     {
-        return $class === KeycloakParsedToken::class;
+        return $class === KeycloakUser::class;
     }
 }
