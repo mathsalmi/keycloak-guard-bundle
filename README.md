@@ -34,7 +34,7 @@ Set up Symfony Security to use the custom authenticator.
 security:
   providers:
     keycloak:
-      id: ACSystems\KeycloakGuardBundle\Security\Provider\KeycloakParsedTokenProvider
+      id: ACSystems\KeycloakGuardBundle\Security\Provider\KeycloakUserProvider
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
