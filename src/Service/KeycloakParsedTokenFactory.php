@@ -39,12 +39,8 @@ class KeycloakParsedTokenFactory
         $clientId = $this->clientId === '@azp'
             ? $token['azp']
             : $token[$this->clientId];
-        $kcRoles = $token['resource_access'][$clientId]['roles'];
-        $roles = array_map(static function (string $role): string {
-            return strpos($role, 'ROLE_') === false ? 'ROLE_' . $role : $role;
-        }, $kcRoles);
-        // Required by Symfony
-        $roles[] = 'ROLE_USER';
+
+        $roles = $this->getRoles($token['resource_access'], $clientId);
 
         return new KeycloakUser(
             $token['sub'],
@@ -52,5 +48,26 @@ class KeycloakParsedTokenFactory
             $roles,
             $token
         );
+    }
+
+    /**
+     * @param array $resourceAccess
+     * @param string $clientId
+     * @return string[]
+     */
+    private function getRoles(array $resourceAccess, string $clientId): array
+    {
+        if (empty($resourceAccess[$clientId])) {
+            return ['ROLE_USER'];
+        }
+
+        $kcRoles = $resourceAccess[$clientId]['roles'];
+        $roles = array_map(static function (string $role): string {
+            return strpos($role, 'ROLE_') === false ? 'ROLE_' . $role : $role;
+        }, $kcRoles);
+        // Required by Symfony
+        $roles[] = 'ROLE_USER';
+
+        return $roles;
     }
 }
