@@ -38,7 +38,7 @@ class KeycloakParsedTokenFactory
     {
         $clientId = $this->clientId === '@azp'
             ? $token['azp']
-            : $token[$this->clientId];
+            : $this->clientId;
 
         $roles = $this->getRoles($token['resource_access'], $clientId);
 
