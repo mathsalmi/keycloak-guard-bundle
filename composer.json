@@ -5,10 +5,7 @@
   "require": {
     "php": "^7.1",
     "ext-json": "*",
-    "symfony/security-core": "^4.3|^5.0",
-    "symfony/security-http": "^4.3|^5.0",
-    "symfony/security-csrf": "^4.3|^5.0",
-    "symfony/security-guard": "^4.3|^5.0",
+    "symfony/security-bundle": "^4.3|^5.0",
     "symfony/yaml": "^4.3|^5.0",
     "fproject/php-jwt": "^4.0"
   },
