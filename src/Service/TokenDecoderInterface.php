@@ -15,8 +15,8 @@ namespace ACSystems\KeycloakGuardBundle\Service;
 interface TokenDecoderInterface
 {
     /**
-     * @param string|mixed $token
+     * @param string $token
      * @return array
      */
-    public function decodeToken($token): array;
+    public function decodeToken(string $token): array;
 }

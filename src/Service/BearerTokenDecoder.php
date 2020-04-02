@@ -37,11 +37,11 @@ class BearerTokenDecoder implements TokenDecoderInterface
     }
 
     /**
-     * @param string|mixed $token
+     * @param string $token
      * @return array
      * @throws Exception
      */
-    public function decodeToken($token): array
+    public function decodeToken(string $token): array
     {
         $jwt = preg_replace('/^Bearer\s/', '', $token);
         $encodedJwtHead = substr($jwt, 0, strpos($jwt, '.'));
@@ -54,9 +54,9 @@ class BearerTokenDecoder implements TokenDecoderInterface
         $keyId = $jwtHeader['kid'];
 
         try {
-            $jwks = $this->jwkProvider->getJwks();
+            $jwks = $this->jwkProvider->getJwks($token);
             if (!isset($jwks[$keyId])) {
-                $jwks = $this->jwkProvider->getJwks(false);
+                $jwks = $this->jwkProvider->getJwks($token, false);
                 if (!isset($jwks[$keyId])) {
                     throw new JWTDecoderException('No key found for decoding the token');
                 }

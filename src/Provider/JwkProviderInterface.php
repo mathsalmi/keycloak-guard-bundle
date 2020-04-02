@@ -15,8 +15,9 @@ namespace ACSystems\KeycloakGuardBundle\Provider;
 interface JwkProviderInterface
 {
     /**
+     * @param string $token
      * @param bool $useCache
      * @return array
      */
-    public function getJwks(bool $useCache = true): array;
+    public function getJwks(string $token, bool $useCache = true): array;
 }

@@ -31,7 +31,8 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('keycloak_guard')
                     ->append($this->getClient())
-                    ->append($this->getJwksUri())
+                    ->append($this->getKeycloakUri())
+                    ->append($this->getKeycloakRealm())
                 ->end();
 
         return $treeBuilder;
@@ -57,9 +58,22 @@ class Configuration implements ConfigurationInterface
     /**
      * @return NodeDefinition
      */
-    public function getJwksUri(): NodeDefinition
+    public function getKeycloakUri(): NodeDefinition
     {
-        $node = new ScalarNodeDefinition('jwks_uri');
+        $node = new ScalarNodeDefinition('base_uri');
+        $node
+            ->validate()
+                ->ifTrue(static function ($v) {
+                    return !is_string($v);
+                })
+                ->thenInvalid('base_uri must be a string');
+
+        return $node;
+    }
+
+    public function getKeycloakRealm(): NodeDefinition
+    {
+        $node = new ScalarNodeDefinition('realm');
         $node->defaultNull();
 
         return $node;

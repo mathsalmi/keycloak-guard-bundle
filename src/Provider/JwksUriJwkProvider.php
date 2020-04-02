@@ -20,6 +20,8 @@ use UnexpectedValueException;
  */
 class JwksUriJwkProvider implements JwkProviderInterface
 {
+    private const JWKS_CACHE = 'acsystems_keycloak_guard_jwk_json_';
+
     /**
      * @var CacheInterface
      */
@@ -28,17 +30,24 @@ class JwksUriJwkProvider implements JwkProviderInterface
     /**
      * @var string
      */
-    private $jwksUri;
+    private $baseUrl;
+
+    /**
+     * @var string | null
+     */
+    private $realm;
 
     /**
      * JsonJwkProvider constructor.
      * @param CacheInterface $cache
-     * @param string $jwksUri
+     * @param string|null $baseUrl
+     * @param string|null $realm
      */
-    public function __construct(CacheInterface $cache, string $jwksUri = '')
+    public function __construct(CacheInterface $cache, ?string $baseUrl, ?string $realm)
     {
         $this->cache = $cache;
-        $this->jwksUri = $jwksUri;
+        $this->baseUrl = $baseUrl;
+        $this->realm = $realm;
     }
 
     /**
@@ -46,9 +55,9 @@ class JwksUriJwkProvider implements JwkProviderInterface
      * @return array
      * @throws InvalidArgumentException
      */
-    public function getJwks(bool $useCache = true): array
+    public function getJwks(string $token, bool $useCache = true): array
     {
-        $jwksPayload = $this->getJson($useCache);
+        $jwksPayload = $this->getJson($token, $useCache);
         try {
             return JWK::parseKeySet($jwksPayload);
         } catch (UnexpectedValueException $ex) {
@@ -61,16 +70,34 @@ class JwksUriJwkProvider implements JwkProviderInterface
      * @return string
      * @throws InvalidArgumentException
      */
-    private function getJson(bool $useCache): string
+    private function getJson(string $token, bool $useCache): string
     {
+        $realm = $this->getRealm($token);
+        $url = "{$this->baseUrl}auth/realms/$realm/protocol/openid-connect/certs";
+
         if ($useCache === false) {
-            return file_get_contents($this->jwksUri);
+            return file_get_contents($url);
         }
 
-        return $this->cache->get('acsystems_keycloak_guard_jwk_json', function (ItemInterface $item): string {
+        return $this->cache->get(self::JWKS_CACHE . $realm, static function (ItemInterface $item) use ($url): string {
             $item->expiresAfter(3600);
 
-            return file_get_contents($this->jwksUri);
+            return file_get_contents($url);
         });
+    }
+
+    /**
+     * @param string $token
+     * @return string
+     */
+    private function getRealm(string $token): string
+    {
+        if ($this->realm !== null) {
+            return $this->realm;
+        }
+        $tokenParts = explode('.', $token);
+        $tokenBody = json_decode(base64_decode($tokenParts[1]), true);
+        $issuerParts = explode('/', $tokenBody['iss']);
+        return end($issuerParts);
     }
 }

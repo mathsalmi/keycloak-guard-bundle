@@ -74,17 +74,19 @@ class KeycloakTokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * @param mixed $credentials
      * @param UserProviderInterface $provider
-     * @return UserInterface
+     * @return UserInterface|null
      * @throws Exception
      */
-    public function getUser($credentials, UserProviderInterface $provider): UserInterface
+    public function getUser($credentials, UserProviderInterface $provider): ?UserInterface
     {
+        /** @var string|null $token */
         $token = $credentials['token'] ?? null;
-        $decodedToken = $this->tokenDecoder->decodeToken($token);
+        if ($token === null) {
+            return null;
+        }
 
-        return $token === null
-            ? null
-            : $this->parsedTokenFactory->createFromToken($decodedToken);
+        $decodedToken = $this->tokenDecoder->decodeToken($token);
+        return $this->parsedTokenFactory->createFromToken($decodedToken);
     }
 
     /**
