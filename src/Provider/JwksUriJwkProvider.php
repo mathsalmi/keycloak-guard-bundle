@@ -51,9 +51,10 @@ class JwksUriJwkProvider implements JwkProviderInterface
     }
 
     /**
+     * @param string $token
      * @param bool $useCache
      * @return array
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function getJwks(string $token, bool $useCache = true): array
     {
@@ -66,9 +67,9 @@ class JwksUriJwkProvider implements JwkProviderInterface
     }
 
     /**
+     * @param string $token
      * @param bool $useCache
      * @return string
-     * @throws InvalidArgumentException
      */
     private function getJson(string $token, bool $useCache): string
     {
