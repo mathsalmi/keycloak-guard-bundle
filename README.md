@@ -53,26 +53,26 @@ security:
     # ...
 ```
 
-Add your jwks provider uri.
+Add your keycloak base url and realm
 
 `config/packages/keycloak_client.yaml:`
 ```yaml
 acsystems_keycloak_guard:
   keycloak_guard:
-    jwks_uri: 'https://example.com/auth/realms/example-realm/protocol/openid-connect/certs'
+    base_uri: 'https://example.com/'
+    realm: 'example-realm'
 ```
 
-#### Configuration
+#### Configurable parameters
 
-By default the azp inside of the token is used as client id. This can be overwritten.
+| Name | Type | Usage |
+| --- | --- | --- |
+| base_uri | string | URL to your keycloak instance |
+| realm | optional string | Realm name, will be derived if not present |
+| client_id | optional string | Human readable client_id, will be derived if not present |
 
-`config/packages/keycloak_client.yaml:`
-```yaml
-acsystems_keycloak_guard:
-  keycloak_guard:
-    client_id: 'my-client-id'
-    # ...
-```
+### Upgrading
+For version migrations instructions see [upgrade instructions](./UPGRADE.md).
 
 ### Supported platforms
 

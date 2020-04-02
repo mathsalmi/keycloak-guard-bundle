@@ -7,7 +7,8 @@ services:
 
   ACSystems\KeycloakGuardBundle\Provider\JwksUriJwkProvider:
     arguments:
-      $jwksUri: '%keycloak_guard.jwks_uri%'
+      $baseUrl: '%keycloak_guard.base_uri%'
+      $realm: '%keycloak_guard.realm%'
 
   ACSystems\KeycloakGuardBundle\Provider\JwkProviderInterface:
     alias: ACSystems\KeycloakGuardBundle\Provider\JwksUriJwkProvider
