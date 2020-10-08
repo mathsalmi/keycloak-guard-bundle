@@ -40,7 +40,7 @@ class KeycloakParsedTokenFactory
             ? $token['azp']
             : $this->clientId;
 
-        $roles = $this->getRoles($token['resource_access'], $clientId);
+        $roles = $this->getRoles($token, $clientId);
 
         return new KeycloakUser(
             $token['sub'],
@@ -51,17 +51,17 @@ class KeycloakParsedTokenFactory
     }
 
     /**
-     * @param array $resourceAccess
+     * @param array $token
      * @param string $clientId
      * @return string[]
      */
-    private function getRoles(array $resourceAccess, string $clientId): array
+    private function getRoles(array $token, string $clientId): array
     {
-        if (empty($resourceAccess[$clientId])) {
+        if (empty($token['resource_access'][$clientId])) {
             return ['ROLE_USER'];
         }
 
-        $kcRoles = $resourceAccess[$clientId]['roles'];
+        $kcRoles = $token['resource_access'][$clientId]['roles'] ?? [];
         $roles = array_map(static function (string $role): string {
             return strpos($role, 'ROLE_') === false ? 'ROLE_' . $role : $role;
         }, $kcRoles);
