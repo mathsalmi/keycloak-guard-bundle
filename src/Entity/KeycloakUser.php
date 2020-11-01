@@ -16,42 +16,40 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class KeycloakUser implements ParsedTokenInterface, UserInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $username;
 
-    /**
-     * @var string[]
-     */
+    /** @var array */
     private $roles;
 
-    /**
-     * @var array
-     */
+    /** @var array */
+    private $parsedToken;
+
+    /** @var string */
     private $token;
 
     /**
-     * KeycloakParsedToken constructor.
+     * KeycloakUser constructor.
      * @param string $id
      * @param string $username
      * @param array $roles
-     * @param array $token
+     * @param array $parsedToken
+     * @param string $token
      */
     public function __construct(
         string $id,
         string $username,
         array $roles,
-        array $token
+        array $parsedToken,
+        string $token
     ) {
         $this->id = $id;
         $this->username = $username;
         $this->roles = $roles;
+        $this->parsedToken = $parsedToken;
         $this->token = $token;
     }
 
@@ -87,7 +85,15 @@ class KeycloakUser implements ParsedTokenInterface, UserInterface
      */
     public function getAttribute(string $attribute)
     {
-        return $this->token[$attribute] ?? null;
+        return $this->parsedToken[$attribute] ?? null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
     }
 
     /**
