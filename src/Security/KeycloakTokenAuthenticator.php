@@ -86,7 +86,7 @@ class KeycloakTokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         $decodedToken = $this->tokenDecoder->decodeToken($token);
-        return $this->parsedTokenFactory->createFromToken($decodedToken);
+        return $this->parsedTokenFactory->createFromToken($decodedToken, $token);
     }
 
     /**
@@ -104,7 +104,7 @@ class KeycloakTokenAuthenticator extends AbstractGuardAuthenticator
      * @param TokenInterface $token
      * @param $providerKey
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): void
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): void
     {
     }
 

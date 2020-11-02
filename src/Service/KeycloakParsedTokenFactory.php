@@ -31,21 +31,23 @@ class KeycloakParsedTokenFactory
     }
 
     /**
-     * @param array $token
+     * @param array $parsedToken
+     * @param string $token
      * @return KeycloakUser
      */
-    public function createFromToken(array $token): KeycloakUser
+    public function createFromToken(array $parsedToken, string $token): KeycloakUser
     {
         $clientId = $this->clientId === '@azp'
-            ? $token['azp']
+            ? $parsedToken['azp']
             : $this->clientId;
 
-        $roles = $this->getRoles($token, $clientId);
+        $roles = $this->getRoles($parsedToken, $clientId);
 
         return new KeycloakUser(
-            $token['sub'],
-            $token['preferred_username'],
+            $parsedToken['sub'],
+            $parsedToken['preferred_username'],
             $roles,
+            $parsedToken,
             $token
         );
     }
