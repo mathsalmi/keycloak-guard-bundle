@@ -57,7 +57,7 @@ class KeycloakParsedTokenFactory
      * @param string $clientId
      * @return string[]
      */
-    private function getRoles(array $token, string $clientId): array
+    protected function getRoles(array $token, string $clientId): array
     {
         if (empty($token['resource_access'][$clientId])) {
             return ['ROLE_USER'];
