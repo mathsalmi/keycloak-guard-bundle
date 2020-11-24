@@ -1,13 +1,14 @@
 {
-  "name": "acsystems/keycloak-guard-bundle",
-  "description": "Symfony guard authentication via keycloak JWT",
+  "name": "mathsalmi/keycloak-guard-bundle",
+  "description": "Symfony 3.4 guard authentication via keycloak JWT",
   "type": "symfony-bundle",
   "require": {
     "php": "^7.1",
     "ext-json": "*",
-    "symfony/security-bundle": "^4.3|^5.0",
-    "symfony/yaml": "^4.3|^5.0",
-    "fproject/php-jwt": "^4.0"
+    "symfony/security-bundle": "3.4.*",
+    "symfony/yaml": "3.4.*",
+    "fproject/php-jwt": "^4.0",
+    "symfony/config": "3.4.*"
   },
   "autoload": {
     "psr-4": {
@@ -19,6 +20,10 @@
     {
       "name": "ACSystems",
       "email": "webdev.administration@ac-systems.com"
+    },
+    {
+      "name": "Matheus Salmi",
+      "email": "mathsalmi@gmail.com"
     }
   ]
 }
