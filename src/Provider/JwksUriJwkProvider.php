@@ -10,8 +10,7 @@ namespace ACSystems\KeycloakGuardBundle\Provider;
 
 use Firebase\JWT\JWK;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use UnexpectedValueException;
 
 /**
@@ -23,7 +22,7 @@ class JwksUriJwkProvider implements JwkProviderInterface
     private const JWKS_CACHE = 'acsystems_keycloak_guard_jwk_json_';
 
     /**
-     * @var CacheInterface
+     * @var AdapterInterface
      */
     private $cache;
 
@@ -39,11 +38,11 @@ class JwksUriJwkProvider implements JwkProviderInterface
 
     /**
      * JsonJwkProvider constructor.
-     * @param CacheInterface $cache
+     * @param AdapterInterface $cache
      * @param string|null $baseUrl
      * @param string|null $realm
      */
-    public function __construct(CacheInterface $cache, ?string $baseUrl, ?string $realm)
+    public function __construct(AdapterInterface $cache, ?string $baseUrl, ?string $realm)
     {
         $this->cache = $cache;
         $this->baseUrl = $baseUrl;
@@ -80,11 +79,15 @@ class JwksUriJwkProvider implements JwkProviderInterface
             return file_get_contents($url);
         }
 
-        return $this->cache->get(self::JWKS_CACHE . $realm, static function (ItemInterface $item) use ($url): string {
+        $cacheKey = self::JWKS_CACHE . $realm;
+        $item = $this->cache->getItem($cacheKey);
+        if(!$item->isHit()) {
             $item->expiresAfter(3600);
+            $item->set(file_get_contents($url));
+            $this->cache->save($item);
+        }
 
-            return file_get_contents($url);
-        });
+        return $item->get();
     }
 
     /**
