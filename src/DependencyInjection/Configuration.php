@@ -8,6 +8,7 @@
 
 namespace ACSystems\KeycloakGuardBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -25,8 +26,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder(ACSystemsKeycloakGuardExtension::EXTENSION_ALIAS);
-        $rootNode = $treeBuilder->getRootNode();
+        $treeBuilder = new TreeBuilder;
+        /** @var ArrayNodeDefinition */
+        $rootNode = $treeBuilder->root(ACSystemsKeycloakGuardExtension::EXTENSION_ALIAS);
         $rootNode
             ->children()
                 ->arrayNode('keycloak_guard')
