@@ -1,5 +1,9 @@
 # Keycloak Symfony Guard Bundle
 
+This package is a fork of [acsystems/keycloak-guard-bundle](https://packagist.org/packages/acsystems/keycloak-guard-bundle) and supports Symfony 3.4.
+
+## Original README
+
 The goal of this bundle is to provide a Keycloak token authenticator guard for Symfony.
 
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
