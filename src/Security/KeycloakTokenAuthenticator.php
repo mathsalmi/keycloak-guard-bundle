@@ -104,7 +104,7 @@ class KeycloakTokenAuthenticator extends AbstractGuardAuthenticator
      * @param TokenInterface $token
      * @param $providerKey
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): void
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): void
     {
     }
 
